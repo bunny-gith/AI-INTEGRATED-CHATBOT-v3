@@ -1,0 +1,52 @@
+{
+  "family": "healthcare-bot",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "healthcare-bot",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/healthcare-bot:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "NODE_ENV", "value": "production"},
+        {"name": "PORT", "value": "3000"},
+        {"name": "DB_PATH", "value": "/app/healthcare_bot.db"}
+      ],
+      "secrets": [
+        {"name": "OPENAI_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/openai"},
+        {"name": "GEMINI_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/gemini"},
+        {"name": "TWILIO_ACCOUNT_SID", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/twilio-sid"},
+        {"name": "TWILIO_AUTH_TOKEN", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/twilio-token"},
+        {"name": "TWILIO_PHONE_NUMBER", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/twilio-number"},
+        {"name": "IDSP_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/idsp"},
+        {"name": "COWIN_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:healthcare-bot/cowin"}
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/healthcare-bot",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}

@@ -1,0 +1,2599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Bot - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+
+        /* Enhanced CSS for better visual appeal */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
+        }
+
+        .floating-animation {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .enhanced-shadow {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 1px 8px rgba(0,0,0,0.1);
+        }
+
+        .enhanced-shadow:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Advanced UI/UX Enhancements */
+        .tab-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .smooth-appear {
+            animation: smoothAppear 0.6s ease-out;
+        }
+
+        @keyframes smoothAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .interactive-button {
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+
+        .interactive-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .interactive-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .modern-input {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .modern-input:focus {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .card-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-lift:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stagger-animation > * {
+            animation: smoothAppear 0.6s ease-out;
+        }
+
+        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+
+        .notification-badge {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: rotate 2s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .notification-badge:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
+            height: 4px;
+            border-radius: 2px;
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: scale(0.8); opacity: 0.5; }
+            30% { transform: scale(1); opacity: 1; }
+        }
+
+        .enhanced-table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .enhanced-table th,
+        .enhanced-table td {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        .enhanced-table tr:hover td {
+            background-color: rgba(59, 130, 246, 0.02);
+        }
+
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+
+        .focus-ring:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body :class="darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'">
+    <div x-data="adminPanel()" class="min-h-screen">
+        <header :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gradient-to-r from-blue-600 to-purple-600 border-gray-200'" class="shadow-lg border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <div class="bg-white bg-opacity-20 rounded-full p-2">
+                            <span class="text-2xl">🏥</span>
+                        </div>
+                        <div class="ml-4">
+                            <h1 class="text-3xl font-bold text-white text-shadow">Healthcare Bot</h1>
+                            <p class="text-blue-100 text-sm text-shadow">Advanced Admin Panel</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-white bg-opacity-20 rounded-lg px-3 py-1">
+                            <div class="text-sm text-white">
+                                Status: <span class="text-green-300 font-semibold animate-pulse">● Active</span>
+                            </div>
+                        </div>
+                        <button @click="showNotifications = !showNotifications" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-2 transition-all duration-200 relative">
+                            <span class="text-white">🔔</span>
+                            <span x-show="notificationCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" x-text="notificationCount"></span>
+                        </button>
+                        <button @click="darkMode = !darkMode" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-2 transition-all duration-200">
+                            <span x-show="!darkMode" class="text-white">🌙</span>
+                            <span x-show="darkMode" class="text-yellow-300">☀️</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Notifications Dropdown -->
+        <div x-show="showNotifications" @click.away="showNotifications = false" class="relative z-50">
+            <div class="absolute right-4 top-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 max-h-96 overflow-y-auto">
+                <div class="p-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Notifications</h3>
+                </div>
+                <div x-show="notificationCount === 0" class="p-4 text-center text-gray-500">
+                    No new notifications
+                </div>
+                <div x-show="notificationCount > 0">
+                    <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" @click="activeTab = 'callbacks'">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span class="text-blue-600 text-sm">📞</span>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900">Pending Callbacks</p>
+                                <p class="text-sm text-gray-600" x-text="callbacks.filter(c => c.status === 'pending').length + ' callbacks need attention'"></p>
+                                <p class="text-xs text-gray-400">Click to view</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" @click="activeTab = 'outbreaks'">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0">
+                                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                                    <span class="text-red-600 text-sm">🚨</span>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900">Active Outbreaks</p>
+                                <p class="text-sm text-gray-600" x-text="outbreaks.filter(o => o.status === 'active').length + ' active outbreaks'"></p>
+                                <p class="text-xs text-gray-400">Click to manage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-white shadow-lg border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-8 stagger-animation">
+                    <button @click="activeTab = 'overview'"
+                            :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'overview', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'overview'}"
+                            class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                        <span class="bounce-in">📊</span>
+                        <span>Overview</span>
+                    </button>
+                    <button @click="activeTab = 'babies'"
+                            :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'babies', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'babies'}"
+                            class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                        <span class="bounce-in">👶</span>
+                        <span>Babies & Vaccination</span>
+                    </button>
+                    <button @click="activeTab = 'workers'"
+                            :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'workers', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'workers'}"
+                            class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                        <span class="bounce-in">👨‍⚕️</span>
+                        <span>Health Workers</span>
+                    </button>
+                      <button @click="activeTab = 'callbacks'"
+                              :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'callbacks', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'callbacks'}"
+                              class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                          <span class="bounce-in">📞</span>
+                          <span>Callbacks</span>
+                      </button>
+                      <button @click="activeTab = 'outbreaks'"
+                              :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'outbreaks', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'outbreaks'}"
+                              class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                          <span class="bounce-in">🚨</span>
+                          <span>Outbreaks</span>
+                      </button>
+                      <button @click="activeTab = 'analytics'"
+                              :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'analytics', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'analytics'}"
+                              class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                          <span class="bounce-in">📊</span>
+                          <span>Analytics</span>
+                      </button>
+                      <button @click="activeTab = 'test'"
+                              :class="{'border-blue-500 text-blue-600 bg-blue-50': activeTab === 'test', 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50': activeTab !== 'test'}"
+                              class="py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg tab-transition interactive-button flex items-center space-x-2 focus-ring">
+                          <span class="bounce-in">🧪</span>
+                          <span>Test Bot</span>
+                      </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div x-show="activeTab === 'overview'" class="px-4 py-6 sm:px-0 animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 stagger-animation">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden enhanced-shadow rounded-xl border border-blue-200 card-lift slide-in-left">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-blue-500 rounded-full p-3 pulse-glow notification-badge">
+                                    <div class="text-2xl text-white floating-animation">👶</div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-blue-600 truncate gradient-text">Total Babies</dt>
+                                        <dd class="text-3xl font-bold text-blue-900 bounce-in" x-text="stats.babies"></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 overflow-hidden enhanced-shadow rounded-xl border border-green-200 card-lift slide-in-left">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-green-500 rounded-full p-3 pulse-glow notification-badge">
+                                    <div class="text-2xl text-white floating-animation">👨‍⚕️</div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-green-600 truncate gradient-text">Health Workers</dt>
+                                        <dd class="text-3xl font-bold text-green-900 bounce-in" x-text="stats.workers"></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 overflow-hidden enhanced-shadow rounded-xl border border-purple-200 card-lift slide-in-right">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-purple-500 rounded-full p-3 pulse-glow notification-badge">
+                                    <div class="text-2xl text-white floating-animation">📞</div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-purple-600 truncate gradient-text">Total Callbacks</dt>
+                                        <dd class="text-3xl font-bold text-purple-900 bounce-in" x-text="stats.callbacks"></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-50 to-red-100 overflow-hidden enhanced-shadow rounded-xl border border-red-200 card-lift slide-in-right">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-red-500 rounded-full p-3 pulse-glow notification-badge">
+                                    <div class="text-2xl text-white floating-animation">🚨</div>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-red-600 truncate gradient-text">Active Outbreaks</dt>
+                                        <dd class="text-3xl font-bold text-red-900 bounce-in" x-text="stats.activeOutbreaks"></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Vaccination Status Chart -->
+                    <div class="bg-white enhanced-shadow rounded-xl border border-gray-200 p-6 card-hover">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center text-shadow">
+                            <span class="mr-2 floating-animation">💉</span>
+                            Vaccination Completion Rates
+                        </h3>
+                        <canvas id="vaccinationChart" width="400" height="300"></canvas>
+                    </div>
+
+                    <!-- Callback Status Chart -->
+                    <div class="bg-white enhanced-shadow rounded-xl border border-gray-200 p-6 card-hover">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center text-shadow">
+                            <span class="mr-2 floating-animation">📞</span>
+                            Callback Status Distribution
+                        </h3>
+                        <canvas id="callbackChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Outbreak Trends Chart -->
+                <div class="bg-white enhanced-shadow rounded-xl border border-gray-200 p-6 mb-8 card-hover">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center text-shadow">
+                        <span class="mr-2 floating-animation">📈</span>
+                        Outbreak Trends (Last 30 Days)
+                    </h3>
+                    <canvas id="outbreakChart" width="800" height="300"></canvas>
+                </div>
+
+                <div class="bg-gradient-to-br from-gray-50 to-white enhanced-shadow rounded-xl border border-gray-200 card-hover">
+                    <div class="px-6 py-6 sm:p-8">
+                        <h3 class="text-2xl leading-6 font-bold text-gray-900 mb-6 flex items-center">
+                            <span class="mr-3">🤖</span>
+                            Bot Features
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-blue-500">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-blue-100 rounded-full p-2">
+                                        <div class="text-xl">🩺</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-semibold text-gray-900">Symptom Checker</h4>
+                                        <p class="text-sm text-gray-600 mt-1">AI-powered symptom analysis with Gemini integration for accurate health guidance</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-green-500">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-green-100 rounded-full p-2">
+                                        <div class="text-xl">💉</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-semibold text-gray-900">Vaccination Tracking</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Complete vaccination schedule monitoring for newborns and children</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-purple-500">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-purple-100 rounded-full p-2">
+                                        <div class="text-xl">💊</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-semibold text-gray-900">Medicine Information</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Comprehensive medicine database with usage guidelines and precautions</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-red-500">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-red-100 rounded-full p-2">
+                                        <div class="text-xl">🚨</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-semibold text-gray-900">Emergency Contacts</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Instant access to emergency services and health helplines</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 border-l-4 border-orange-500">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-orange-100 rounded-full p-2">
+                                        <div class="text-xl">🔔</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="font-semibold text-gray-900">Outbreak Alerts</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Real-time notifications about disease outbreaks in your area</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'babies'" class="px-4 py-6 sm:px-0">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="mb-6">
+                            <div class="mb-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                                        <span>👶</span>
+                                        <span class="ml-2">Registered Babies</span>
+                                        <div x-show="loading" class="ml-2 animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                                    </h3>
+                                    <div class="flex space-x-2">
+                                        <button x-show="selectedBabies.length > 0" @click="bulkDeleteBabies()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md text-sm transition-all duration-200">Delete Selected (<span x-text="selectedBabies.length"></span>)</button>
+                                        <button @click.stop="showAddEditModal('babies', null)" class="btn-gradient text-white font-bold py-2 px-4 rounded-md text-sm">Add New Baby</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Advanced Filters -->
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                                        <input type="text" x-model="searchBabies" @input="filterBabies()" placeholder="Name, ID, phone..." class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Vaccination Status</label>
+                                        <select x-model="filterVaccinationStatus" @change="filterBabies()" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                                            <option value="">All Status</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="upcoming">Upcoming</option>
+                                            <option value="overdue">Overdue</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Age Range</label>
+                                        <select x-model="filterAgeRange" @change="filterBabies()" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                                            <option value="">All Ages</option>
+                                            <option value="0-6">0-6 months</option>
+                                            <option value="6-12">6-12 months</option>
+                                            <option value="12-24">1-2 years</option>
+                                            <option value="24+">2+ years</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                                        <select x-model="sortBabiesBy" @change="filterBabies()" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                                            <option value="created_at">Registration Date</option>
+                                            <option value="dob">Date of Birth</option>
+                                            <option value="mother_name">Mother Name</option>
+                                            <option value="beneficiary_id">ID</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-4">
+                                        <div class="text-sm text-gray-600">
+                                            Showing <span x-text="filteredBabies.length"></span> of <span x-text="babies.length"></span> babies
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button @click="exportToCSV('babies')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Export CSV</button>
+                                            <button @click="clearFilters()" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Clear Filters</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div x-show="babies.length === 0" class="text-gray-500 text-center py-8 animate-fade-in">
+                            <div class="progress-bar w-32 h-1 mx-auto mb-4"></div>
+                            <p class="text-lg gradient-text">Loading babies data...</p>
+                            <p class="text-sm text-gray-400 mt-2">Please wait while we fetch the latest information</p>
+                        </div>
+                        <div x-show="babies.length > 0" class="overflow-x-auto bg-white rounded-lg enhanced-shadow scroll-smooth">
+                            <table class="min-w-full enhanced-table">
+                                <thead class="bg-gradient-to-r from-blue-500 to-blue-600">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">
+                                            <input type="checkbox" @change="toggleSelectAllBabies()" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus-ring">
+                                        </th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Beneficiary ID</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Baby Name</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Mother</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">DOB</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Phone</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Vaccination Status</th>
+                                        <th class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider slide-in-left">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                    <template x-for="(baby, index) in filteredBabies" :key="baby.id">
+                                        <tr :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'" class="hover:bg-blue-50 transition-all duration-300 smooth-appear" :style="`animation-delay: ${index * 0.1}s`">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <input type="checkbox" :checked="selectedBabies.includes(baby.id)" @change="toggleBabySelection(baby.id)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus-ring">
+                                            </td>
+                                            <td @click="showVaccinationDetails(baby)" class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 cursor-pointer hover:text-blue-600 transition-colors duration-200" x-text="baby.beneficiary_id"></td>
+                                            <td @click="showVaccinationDetails(baby)" class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-800 cursor-pointer font-medium underline transition-colors duration-200" x-text="baby.baby_name || 'Baby ' + baby.mother_name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="baby.mother_name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="baby.dob"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="baby.phone_number"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <div class="flex items-center space-x-2">
+                                                    <span x-show="baby.vaccinationStatus" :class="getVaccinationStatusClass(baby.vaccinationStatus)" class="px-2 py-1 rounded-full text-xs font-medium transition-all duration-300" x-text="getVaccinationStatusText(baby.vaccinationStatus)"></span>
+                                                    <span x-show="!baby.vaccinationStatus" class="text-gray-400 text-xs loading-shimmer rounded w-16 h-4"></span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                                                <button @click.stop="showAddEditModal('babies', baby)" class="interactive-button bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 focus-ring">Edit</button>
+                                                <button @click.stop="deleteItem('babies', baby.id)" class="interactive-button bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 focus-ring">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'workers'" class="px-4 py-6 sm:px-0">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Health Workers Directory</h3>
+                            <div class="flex space-x-2">
+                                <button @click="exportToCSV('workers')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Export CSV</button>
+                                <button @click.stop="showAddEditModal('workers', null)" class="btn-gradient text-white font-bold py-2 px-4 rounded-md text-sm">Add New Worker</button>
+                            </div>
+                        </div>
+                        <div x-show="workers.length === 0" class="text-gray-500 text-center py-4">
+                            Loading health workers data...
+                        </div>
+                        <div x-show="workers.length > 0" class="overflow-x-auto bg-white rounded-lg shadow-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-green-500 to-green-600">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Name</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Designation</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Phone</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Pincode</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Facility</th>
+                                        <th class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="(worker, index) in workers" :key="worker.id">
+                                        <tr :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'" class="hover:bg-green-50 transition-colors duration-200">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900" x-text="worker.name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="worker.designation"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="worker.phone_number"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="worker.pincode"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="worker.facility_name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                                                <button @click.stop="showAddEditModal('workers', worker)" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 mr-2">Edit</button>
+                                                <button @click.stop="deleteItem('workers', worker.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div x-show="activeTab === 'callbacks'" class="px-4 py-6 sm:px-0">
+                <div class="bg-white shadow-xl rounded-xl border border-gray-200">
+                    <div class="px-6 py-6 sm:p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <h3 class="text-2xl leading-6 font-bold text-gray-900 flex items-center">
+                                        <span class="mr-3">📞</span>
+                                        Callback Requests
+                                    </h3>
+                                    <div class="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                                        <span x-text="callbacks.filter(c => c.status === 'pending').length"></span> pending
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button x-show="selectedCallbacks.length > 0" @click="bulkCompleteCallbacks()" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Complete Selected (<span x-text="selectedCallbacks.length"></span>)</button>
+                                    <button @click="exportToCSV('callbacks')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Export CSV</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div x-show="callbacks.length === 0" class="text-center py-12">
+                            <div class="text-6xl mb-4">📞</div>
+                            <h4 class="text-lg font-medium text-gray-900 mb-2">No Callback Requests</h4>
+                            <p class="text-gray-500">All callback requests have been processed.</p>
+                        </div>
+                        <div x-show="callbacks.length > 0" class="overflow-x-auto bg-white rounded-lg shadow-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                            <input type="checkbox" @change="toggleSelectAllCallbacks()" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                        </th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Phone Number</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Language</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Requested At</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Feedback</th>
+                                        <th class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="(callback, index) in callbacks" :key="callback.id">
+                                        <tr :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'" class="hover:bg-indigo-50 transition-colors duration-200">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <input type="checkbox" :checked="selectedCallbacks.includes(callback.id)" @change="toggleCallbackSelection(callback.id)" :disabled="callback.status === 'completed'" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 disabled:opacity-50">
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900" x-text="callback.phone_number"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="callback.language"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <span x-text="callback.status" :class="{'bg-green-100 text-green-800': callback.status === 'completed', 'bg-yellow-100 text-yellow-800': callback.status === 'pending'}" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="new Date(callback.created_at).toLocaleString()"></td>
+                                            <td class="px-6 py-4 text-sm text-gray-700">
+                                                <div x-show="callback.status === 'completed' && callback.feedback_rating" class="space-y-1">
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="text-yellow-500">⭐</span>
+                                                        <span class="font-medium" x-text="callback.feedback_rating + '/5'"></span>
+                                                    </div>
+                                                    <div x-show="callback.feedback_text" class="text-xs text-gray-600 max-w-xs truncate" :title="callback.feedback_text" x-text="callback.feedback_text"></div>
+                                                    <div x-show="callback.feedback_at" class="text-xs text-gray-500" x-text="'Submitted: ' + new Date(callback.feedback_at).toLocaleDateString()"></div>
+                                                </div>
+                                                <div x-show="callback.status === 'completed' && !callback.feedback_rating" class="text-xs text-gray-500 italic">
+                                                    No feedback yet
+                                                </div>
+                                                <div x-show="callback.status === 'pending'" class="text-xs text-gray-400">
+                                                    Pending completion
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                <button x-show="callback.status === 'pending'" @click.stop="markCallbackComplete(callback.id)" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors duration-200">Mark Completed</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'outbreaks'" class="px-4 py-6 sm:px-0">
+                <div class="bg-white shadow-xl rounded-xl border border-gray-200">
+                    <div class="px-6 py-6 sm:p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl leading-6 font-bold text-gray-900 flex items-center">
+                                <span class="mr-3">🚨</span>
+                                Disease Outbreaks
+                            </h3>
+                            <div class="flex space-x-2">
+                                <button @click="exportToCSV('outbreaks')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Export CSV</button>
+                                <button @click="broadcastAllAlerts()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md text-sm">Broadcast All Alerts</button>
+                                <button @click.stop="showAddEditModal('outbreaks', null)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm">Add New Outbreak</button>
+                            </div>
+                        </div>
+                        <div x-show="outbreaks.length === 0" class="text-center py-12">
+                            <div class="text-6xl mb-4">🚨</div>
+                            <h4 class="text-lg font-medium text-gray-900 mb-2">No Outbreaks Reported</h4>
+                            <p class="text-gray-500">All monitored areas are clear of disease outbreaks.</p>
+                        </div>
+                        <div x-show="outbreaks.length > 0" class="overflow-x-auto bg-white rounded-lg shadow-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-red-500 to-red-600">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Disease</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Location</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Severity</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Reported</th>
+                                        <th class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="(outbreak, index) in outbreaks" :key="outbreak.id">
+                                        <tr :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'" class="hover:bg-red-50 transition-colors duration-200">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900" x-text="outbreak.disease_name"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="outbreak.location"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <span x-text="outbreak.severity" :class="{'bg-red-100 text-red-800': outbreak.severity === 'critical', 'bg-orange-100 text-orange-800': outbreak.severity === 'high', 'bg-yellow-100 text-yellow-800': outbreak.severity === 'moderate', 'bg-green-100 text-green-800': outbreak.severity === 'low'}" class="px-2 py-1 rounded-full text-xs font-medium"></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <span x-text="outbreak.status" :class="{'bg-green-100 text-green-800': outbreak.status === 'resolved', 'bg-blue-100 text-blue-800': outbreak.status === 'monitoring', 'bg-red-100 text-red-800': outbreak.status === 'active'}" class="px-2 py-1 rounded-full text-xs font-medium"></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" x-text="new Date(outbreak.reported_date).toLocaleDateString()"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                                                <button @click.stop="broadcastAlert(outbreak.id)" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 mr-2">Broadcast</button>
+                                                <button @click.stop="showAddEditModal('outbreaks', outbreak)" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 mr-2">Edit</button>
+                                                <button @click.stop="deleteItem('outbreaks', outbreak.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'analytics'" class="px-4 py-6 sm:px-0">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Bot Usage Statistics -->
+                    <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                            <span class="mr-2">🤖</span>
+                            Bot Usage Statistics
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                                <span class="text-blue-900 font-medium">Total Messages</span>
+                                <span class="text-blue-600 font-bold" x-text="messages.length">0</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="text-green-900 font-medium">Active Sessions</span>
+                                <span class="text-green-600 font-bold">1</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                                <span class="text-purple-900 font-medium">Avg Response Time</span>
+                                <span class="text-purple-600 font-bold">2.3s</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                                <span class="text-orange-900 font-medium">Vaccination Queries</span>
+                                <span class="text-orange-600 font-bold" x-text="messages.filter(m => m.text.toLowerCase().includes('vaccin')).length">0</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                                <span class="text-red-900 font-medium">Emergency Calls</span>
+                                <span class="text-red-600 font-bold" x-text="messages.filter(m => m.text.toLowerCase().includes('emergency') || m.text.toLowerCase().includes('help')).length">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Popular Features -->
+                    <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                            <span class="mr-2">⭐</span>
+                            Popular Features
+                        </h3>
+                        <canvas id="featuresChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- User Engagement Metrics -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">User Engagement</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Daily Active Users</span>
+                                <span class="font-bold text-blue-600">24</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Weekly Active Users</span>
+                                <span class="font-bold text-green-600">156</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Monthly Active Users</span>
+                                <span class="font-bold text-purple-600">623</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Response Quality</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Avg Satisfaction</span>
+                                <span class="font-bold text-yellow-600">4.2/5 ⭐</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Resolution Rate</span>
+                                <span class="font-bold text-green-600">87%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Callback Rate</span>
+                                <span class="font-bold text-orange-600">12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">System Health</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Uptime</span>
+                                <span class="font-bold text-green-600">99.8%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Response Time</span>
+                                <span class="font-bold text-blue-600">1.2s</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Error Rate</span>
+                                <span class="font-bold text-red-600">0.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Logs -->
+                <div class="bg-white shadow-xl rounded-xl border border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                            <span class="mr-2">📝</span>
+                            Recent Message Logs
+                        </h3>
+                        <button @click="exportToCSV('messages')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">Export Logs</button>
+                    </div>
+                    <div x-show="messages.length === 0" class="text-center py-8 text-gray-500">
+                        No messages logged yet. Start testing the bot to see activity.
+                    </div>
+                    <div x-show="messages.length > 0" class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sender</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="message in messages.slice(-20)" :key="message.id">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" x-text="message.time"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="message.sender"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-900 max-w-md truncate" x-text="message.text"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span x-show="message.sender === 'user'" class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">User</span>
+                                            <span x-show="message.sender === 'bot'" class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Bot</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'test'" class="px-4 py-6 sm:px-0 animate-fade-in">
+                <div class="flex justify-center">
+                    <!-- Mobile Screen View -->
+                    <div class="bg-white enhanced-shadow rounded-2xl overflow-hidden w-full max-w-lg mx-auto relative animate-fade-in" style="height: 800px;">
+                        <!-- WhatsApp-like Header -->
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-4 flex items-center flex-shrink-0 glass-effect">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center pulse-glow">
+                                    <span class="text-white text-lg floating-animation">🤖</span>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-lg font-semibold text-white">AI Bot</h3>
+                                <p class="text-green-100 text-sm">Online</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Area -->
+                        <div class="overflow-y-auto bg-gray-50 p-4 space-y-4 scroll-smooth" id="chatArea" style="height: calc(800px - 80px - 100px); padding-bottom: 100px;">
+                            <div x-show="messages.length === 0" class="text-center text-gray-500 py-12 animate-fade-in">
+                                <div class="text-5xl mb-4 floating-animation">💬</div>
+                                <p class="text-lg gradient-text">Start a conversation with the AI Bot</p>
+                            </div>
+                            <template x-for="message in messages" :key="message.id">
+                                <div :class="message.sender === 'user' ? 'flex justify-end slide-in-right' : 'flex justify-start slide-in-left'" class="smooth-appear">
+                                    <div :class="message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-white text-gray-800 border border-gray-200'"
+                                         class="max-w-xs px-4 py-3 rounded-2xl enhanced-shadow card-lift">
+                                        <p class="text-sm leading-relaxed whitespace-pre-wrap" x-html="formatMessage(message.text)"></p>
+                                        <p :class="message.sender === 'user' ? 'text-blue-100' : 'text-gray-400'"
+                                           class="text-xs mt-2" x-text="message.time"></p>
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- Typing indicator -->
+                            <div x-show="isTyping" class="flex justify-start slide-in-left">
+                                <div class="bg-white text-gray-800 border border-gray-200 max-w-xs px-4 py-3 rounded-2xl enhanced-shadow">
+                                    <div class="typing-indicator">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Input Area -->
+                        <div class="absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4 bg-white glass-effect">
+                            <div class="flex space-x-2">
+                                <input type="text" x-model="testMessage"
+                                        @keydown.enter="sendTestMessage()"
+                                        autofocus
+                                        class="flex-1 modern-input px-4 py-3 rounded-full text-sm focus-ring"
+                                        placeholder="Type a message...">
+                                <button @click="sendVoiceMessage()"
+                                        :class="isRecording ? 'interactive-button bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-full flex items-center enhanced-shadow animate-pulse focus-ring' : 'interactive-button bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-full flex items-center enhanced-shadow focus-ring'"
+                                        x-text="isRecording ? '⏹️' : '🎤'">
+                                </button>
+                                <button @click="sendTestMessage()"
+                                        class="interactive-button btn-gradient text-white px-5 py-3 rounded-full flex items-center enhanced-shadow focus-ring">
+                                    <span class="mr-1 floating-animation">📤</span>
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-gray-800 text-white py-8 mt-12 animate-fade-in">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-animation">
+                    <div class="slide-in-left">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gradient-text">
+                            <span class="mr-2 floating-animation">🏥</span>
+                            Healthcare Bot
+                        </h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Advanced AI-powered healthcare assistant for rural and semi-urban areas, providing symptom checking, vaccination tracking, and medical information.
+                        </p>
+                    </div>
+                    <div class="slide-in-left">
+                        <h4 class="text-md font-semibold mb-4 gradient-text">Quick Links</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li><a href="/admin" class="hover:text-white transition-all duration-200 hover:translate-x-1 inline-block focus-ring">Admin Panel</a></li>
+                            <li><a href="/test-message?message=hi" class="hover:text-white transition-all duration-200 hover:translate-x-1 inline-block focus-ring">Test Bot</a></li>
+                            <li><a href="/health" class="hover:text-white transition-all duration-200 hover:translate-x-1 inline-block focus-ring">Health Check</a></li>
+                        </ul>
+                    </div>
+                    <div class="slide-in-right">
+                        <h4 class="text-md font-semibold mb-4 gradient-text">Contact</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-center"><span class="mr-2">📧</span> support@healthcarebot.com</li>
+                            <li class="flex items-center"><span class="mr-2">📞</span> Emergency: 108</li>
+                            <li class="flex items-center"><span class="mr-2">🌐</span> Version 1.0.0</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+                    <p class="animate-fade-in">&copy; 2024 Healthcare Bot. Built with ❤️ for rural healthcare.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div style="display: none" x-bind:style="isModalOpen ? 'display: block' : 'display: none'" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+        <div class="relative mx-auto p-6 border w-full max-w-2xl shadow-2xl rounded-xl bg-white transform transition-all duration-300 scale-100" x-show="isModalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900 flex items-center" x-text="modalTitle">
+                        <span class="mr-2" x-show="modalType === 'babies'">👶</span>
+                        <span class="mr-2" x-show="modalType === 'workers'">👨‍⚕️</span>
+                        <span class="mr-2" x-show="modalType === 'outbreaks'">🚨</span>
+                        <span class="mr-2" x-show="modalType === 'medicines'">💊</span>
+                    </h3>
+                    <button @click="isModalOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                        <span class="text-2xl">×</span>
+                    </button>
+                </div>
+                <div class="px-1 py-3">
+                    <form @submit.prevent="saveItem()">
+                        <div x-bind:style="modalType === 'babies' ? 'display: block' : 'display: none'" class="space-y-4 stagger-animation">
+                            <div class="slide-in-left">
+                                <label for="beneficiary_id" class="block text-sm font-medium text-gray-700 gradient-text">Beneficiary ID</label>
+                                <input type="text" x-model="modalData.beneficiary_id" id="beneficiary_id" class="mt-1 block w-full modern-input px-3 py-2 focus-ring" placeholder="Enter beneficiary ID">
+                            </div>
+                            <div class="slide-in-left">
+                                <label for="mother_name" class="block text-sm font-medium text-gray-700 gradient-text">Mother's Name</label>
+                                <input type="text" x-model="modalData.mother_name" id="mother_name" class="mt-1 block w-full modern-input px-3 py-2 focus-ring" placeholder="Enter mother's name">
+                            </div>
+                            <div class="slide-in-right">
+                                <label for="baby_name" class="block text-sm font-medium text-gray-700 gradient-text">Baby's Name</label>
+                                <input type="text" x-model="modalData.baby_name" id="baby_name" class="mt-1 block w-full modern-input px-3 py-2 focus-ring" placeholder="Enter baby's name">
+                            </div>
+                            <div class="slide-in-right">
+                                <label for="dob" class="block text-sm font-medium text-gray-700 gradient-text">Date of Birth</label>
+                                <input type="date" x-model="modalData.dob" id="dob" class="mt-1 block w-full modern-input px-3 py-2 focus-ring">
+                            </div>
+                            <div class="slide-in-left">
+                                <label for="phone_number" class="block text-sm font-medium text-gray-700 gradient-text">Phone Number</label>
+                                <input type="text" x-model="modalData.phone_number" id="phone_number" class="mt-1 block w-full modern-input px-3 py-2 focus-ring" placeholder="Enter phone number">
+                            </div>
+                            <div class="slide-in-left">
+                                <label for="mother_id" class="block text-sm font-medium text-gray-700 gradient-text">Mother's ID</label>
+                                <input type="text" x-model="modalData.mother_id" id="mother_id" class="mt-1 block w-full modern-input px-3 py-2 focus-ring" placeholder="Enter mother's ID">
+                            </div>
+                        </div>
+
+                        <div x-bind:style="modalType === 'workers' ? 'display: block' : 'display: none'" class="space-y-4">
+                            <div>
+                                <label for="worker_name" class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" x-model="modalData.name" id="worker_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="designation" class="block text-sm font-medium text-gray-700">Designation</label>
+                                <input type="text" x-model="modalData.designation" id="designation" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="worker_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                <input type="text" x-model="modalData.phone_number" id="worker_phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="pincode" class="block text-sm font-medium text-gray-700">Pincode</label>
+                                <input type="text" x-model="modalData.pincode" id="pincode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="facility_name" class="block text-sm font-medium text-gray-700">Facility Name</label>
+                                <input type="text" x-model="modalData.facility_name" id="facility_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="facility_type" class="block text-sm font-medium text-gray-700">Facility Type</label>
+                                <input type="text" x-model="modalData.facility_type" id="facility_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                <input type="text" x-model="modalData.address" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                        </div>
+
+                        <div x-bind:style="modalType === 'outbreaks' ? 'display: block' : 'display: none'" class="space-y-4">
+                            <div>
+                                <label for="disease_name" class="block text-sm font-medium text-gray-700">Disease Name</label>
+                                <input type="text" x-model="modalData.disease_name" id="disease_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., Dengue, Malaria, Cholera">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                                    <input type="text" x-model="modalData.location" id="location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="City/District">
+                                </div>
+                                <div>
+                                    <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+                                    <input type="text" x-model="modalData.state" id="state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="State name">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="district" class="block text-sm font-medium text-gray-700">District</label>
+                                    <input type="text" x-model="modalData.district" id="district" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                                <div>
+                                    <label for="pincode" class="block text-sm font-medium text-gray-700">Pincode</label>
+                                    <input type="text" x-model="modalData.pincode" id="pincode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="severity" class="block text-sm font-medium text-gray-700">Severity</label>
+                                    <select x-model="modalData.severity" id="severity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                        <option value="low">Low</option>
+                                        <option value="moderate">Moderate</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select x-model="modalData.status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                        <option value="active">Active</option>
+                                        <option value="monitoring">Monitoring</option>
+                                        <option value="resolved">Resolved</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="reported_date" class="block text-sm font-medium text-gray-700">Reported Date</label>
+                                <input type="date" x-model="modalData.reported_date" id="reported_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea x-model="modalData.description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Brief description of the outbreak"></textarea>
+                            </div>
+                            <div>
+                                <label for="symptoms" class="block text-sm font-medium text-gray-700">Symptoms</label>
+                                <textarea x-model="modalData.symptoms" id="symptoms" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Common symptoms of the disease"></textarea>
+                            </div>
+                            <div>
+                                <label for="prevention_measures" class="block text-sm font-medium text-gray-700">Prevention Measures</label>
+                                <textarea x-model="modalData.prevention_measures" id="prevention_measures" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="How to prevent the disease"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="affected_population" class="block text-sm font-medium text-gray-700">Affected Population</label>
+                                    <input type="number" x-model="modalData.affected_population" id="affected_population" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                                <div>
+                                    <label for="deaths" class="block text-sm font-medium text-gray-700">Deaths</label>
+                                    <input type="number" x-model="modalData.deaths" id="deaths" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button @click="isModalOpen = false" type="button" class="interactive-button px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-200 focus-ring">
+                                Cancel
+                            </button>
+                            <button type="submit" class="interactive-button px-6 py-2 text-sm font-medium text-white btn-gradient rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus-ring relative overflow-hidden">
+                                <span x-show="isEditing" class="relative z-10">Update</span>
+                                <span x-show="!isEditing" class="relative z-10">Create</span>
+                                <div class="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity duration-200"></div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vaccination Details Modal -->
+    <div id="vaccination-modal" style="display: none;" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center" onclick="event.stopPropagation()">
+        <!-- TEST: Bright red background to ensure modal is visible -->
+        <div class="relative mx-auto p-6 border w-full max-w-4xl shadow-2xl rounded-xl bg-white transform transition-all duration-300 scale-100" style="max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+            <!-- Professional Header -->
+            <div class="bg-blue-600 text-white p-4 rounded-lg mb-6">
+                <h2 class="text-xl font-bold">Vaccination Details - Baby ID: <span id="modal-baby-id">NONE</span></h2>
+                <p class="text-blue-100">Status: <span id="modal-status">LOADING</span></p>
+            </div>
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl leading-6 font-bold text-gray-900">
+                        Vaccination Record
+                    </h3>
+                    <button onclick="console.log('X button clicked - closing modal'); const modal = document.querySelector('#vaccination-modal'); modal.style.display='none'; delete modal.dataset.keepOpen;" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                        <span class="text-3xl">×</span>
+                    </button>
+                </div>
+
+                <div x-show="vaccinationModalOpen" class="space-y-6">
+                    <div x-show="vaccinationStatus" class="space-y-6" x-transition>
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                            <span class="mr-2">👶</span>
+                            Child Information
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-700"><strong>Name:</strong> <span id="baby-name"></span></p>
+                                <p class="text-sm text-gray-700"><strong>Mother:</strong> <span id="baby-mother"></span></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-700"><strong>Date of Birth:</strong> <span id="baby-dob"></span></p>
+                                <p class="text-sm text-gray-700"><strong>Age:</strong> <span id="baby-age"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vaccination Status -->
+                    <div class="space-y-4">
+                        <!-- Overdue Vaccinations -->
+                        <div id="overdue-section" style="display: none;" class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-red-900 mb-4">
+                                Overdue Vaccinations
+                            </h4>
+                            <div id="overdue-list" class="space-y-3">
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Vaccinations -->
+                        <div id="upcoming-section" style="display: none;" class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-blue-900 mb-4">
+                                Next Vaccination Due
+                            </h4>
+                            <div class="bg-white p-4 rounded-lg border border-yellow-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-yellow-900" id="upcoming-name"></p>
+                                        <p class="text-sm text-yellow-700" id="upcoming-desc"></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-yellow-600 font-medium">Due in <span id="upcoming-days"></span> days</p>
+                                        <p class="text-xs text-yellow-500" id="upcoming-date"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Completed Vaccinations -->
+                        <div id="completed-section" style="display: none;" class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-green-900 mb-4">
+                                Completed Vaccinations
+                            </h4>
+                            <div id="completed-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            </div>
+                        </div>
+
+                        <!-- All Up to Date -->
+                        <div id="all-up-to-date-section" style="display: none;" class="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                            <div class="text-4xl mb-4">✓</div>
+                            <h4 class="text-lg font-semibold text-green-900 mb-2">All Vaccinations Up to Date</h4>
+                            <p class="text-green-700">Vaccination schedule is current.</p>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                        <button onclick="console.log('Close button clicked - closing modal'); const modal = document.querySelector('#vaccination-modal'); modal.style.display='none'; delete modal.dataset.keepOpen;" class="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                            Close
+                        </button>
+                        <button @click="markVaccinationComplete()" x-show="vaccinationStatus.upcoming && vaccinationStatus.upcoming.length > 0" class="px-6 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200">
+                            Mark Next Vaccine Complete
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function adminPanel() {
+            return {
+                activeTab: 'overview',
+                stats: {
+                    babies: 0,
+                    workers: 0,
+                    callbacks: 0,
+                    activeOutbreaks: 0
+                },
+                charts: {
+                    vaccinationChart: null,
+                    callbackChart: null,
+                    outbreakChart: null,
+                    featuresChart: null
+                },
+                babies: [],
+                filteredBabies: [],
+                workers: [],
+                callbacks: [],
+                outbreaks: [],
+                babyVaccinationStatuses: {}, // Store vaccination status for each baby
+                messages: [],
+                selectedBabies: [],
+                selectedCallbacks: [],
+                showNotifications: false,
+                notificationCount: 0,
+                loading: false,
+                searchBabies: '',
+                filterVaccinationStatus: '',
+                filterAgeRange: '',
+                sortBabiesBy: 'created_at',
+                testMessage: '',
+                testResult: '',
+                isModalOpen: false,
+                modalTitle: '',
+                modalType: '',
+                isEditing: false,
+                modalData: {},
+                isRecording: false,
+                mediaRecorder: null,
+                recordedChunks: [],
+                vaccinationModalOpen: false, // Controls modal visibility
+                selectedBaby: null,
+                vaccinationStatus: null,
+                isTyping: false, // For chat typing indicator
+
+                init() {
+                   this.loadData();
+                   this.darkMode = false; // Initialize dark mode
+                   // Auto-refresh notifications every 30 seconds
+                   setInterval(() => {
+                       this.updateNotificationCount();
+                   }, 30000);
+               },
+
+               updateNotificationCount() {
+                   const pendingCallbacks = this.callbacks.filter(c => c.status === 'pending').length;
+                   const activeOutbreaks = this.outbreaks.filter(o => o.status === 'active').length;
+                   this.notificationCount = pendingCallbacks + activeOutbreaks;
+               },
+
+                tabClass(tab) {
+                    return {
+                        'border-blue-500 text-blue-600': this.activeTab === tab,
+                        'border-transparent text-gray-500 hover:text-gray-700': this.activeTab !== tab,
+                    };
+                },
+
+                getVaccinationStatusText(status) {
+                    if (!status) return 'Loading...';
+                    if (status.overdue && status.overdue.length > 0) {
+                        return `${status.overdue.length} overdue`;
+                    }
+                    if (status.upcoming && status.upcoming.length > 0) {
+                        return `Next: ${status.upcoming[0].name}`;
+                    }
+                    return `${status.completed.length} completed`;
+                },
+
+                getVaccinationStatusClass(status) {
+                    if (!status) return 'bg-gray-100 text-gray-600';
+                    if (status.overdue && status.overdue.length > 0) {
+                        return 'bg-red-100 text-red-800';
+                    }
+                    if (status.upcoming && status.upcoming.length > 0) {
+                        return 'bg-yellow-100 text-yellow-800';
+                    }
+                    return 'bg-green-100 text-green-800';
+                },
+
+                async loadData() {
+                    this.loading = true;
+
+                    try {
+                        const babiesResponse = await fetch('/api/babies');
+                        const babiesData = await babiesResponse.json();
+                        console.log('Babies data loaded:', babiesData);
+                        if (babiesData.success) {
+                            this.babies = babiesData.data;
+                            this.filteredBabies = babiesData.data;
+                            this.stats.babies = babiesData.data.length;
+                            console.log('Babies array:', this.babies);
+                            // Load vaccination status for each baby
+                            await this.loadVaccinationStatuses();
+                        } else {
+                            console.error('Error loading babies:', babiesData.error || babiesData);
+                        }
+
+                        const workersResponse = await fetch('/api/health-workers');
+                        const workersData = await workersResponse.json();
+                        if (workersData.success) {
+                            this.workers = workersData.data;
+                            this.stats.workers = workersData.data.length;
+                        } else {
+                            console.error('Error loading workers:', workersData.error || workersData);
+                        }
+
+                        const callbacksResponse = await fetch('/api/callbacks');
+                        const callbacksData = await callbacksResponse.json();
+                        if (callbacksData.success) {
+                            this.callbacks = callbacksData.data;
+                        } else {
+                            console.error('Error loading callbacks:', callbacksData.error || callbacksData);
+                        }
+
+                        const outbreaksResponse = await fetch('/api/outbreaks');
+                        const outbreaksData = await outbreaksResponse.json();
+                        if (outbreaksData.success) {
+                            this.outbreaks = outbreaksData.data;
+                            this.stats.callbacks = callbacksData.data.length;
+                            this.stats.activeOutbreaks = outbreaksData.data.filter(o => o.status === 'active').length;
+                            this.updateNotificationCount();
+                        } else {
+                            console.error('Error loading outbreaks:', outbreaksData.error || outbreaksData);
+                        }
+
+                    } catch (error) {
+                        console.error('Error loading data:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+
+                    // Create charts after data is loaded
+                    this.$nextTick(() => {
+                        this.createCharts();
+                    });
+                },
+
+                async loadVaccinationStatuses() {
+                    for (const baby of this.babies) {
+                        try {
+                            const response = await fetch(`/api/vaccination/${baby.beneficiary_id}`);
+                            const data = await response.json();
+                            if (data.success) {
+                                baby.vaccinationStatus = data.data;
+                            }
+                        } catch (error) {
+                            console.error(`Error loading vaccination status for ${baby.beneficiary_id}:`, error);
+                        }
+                    }
+                },
+
+                formatMessage(text) {
+                    return text.replace(/\n/g, '<br>');
+                },
+
+                async sendTestMessage() {
+                    if (!this.testMessage.trim()) return;
+
+                    // Add user message
+                    const userMessage = {
+                        id: Date.now(),
+                        sender: 'user',
+                        text: this.testMessage,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    this.messages.push(userMessage);
+                    const messageToSend = this.testMessage;
+                    this.testMessage = '';
+
+                    // Scroll to bottom
+                    this.$nextTick(() => {
+                        const chatArea = document.getElementById('chatArea');
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                    });
+
+                    // Show typing indicator
+                    this.isTyping = true;
+                    this.$nextTick(() => {
+                        const chatArea = document.getElementById('chatArea');
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                    });
+
+                    try {
+                        const response = await fetch(`/test-message?message=${encodeURIComponent(messageToSend)}`);
+                        const data = await response.json();
+
+                        // Hide typing indicator
+                        this.isTyping = false;
+
+                        // Add bot response with delay for better UX
+                        setTimeout(() => {
+                            const botMessage = {
+                                id: Date.now() + 1,
+                                sender: 'bot',
+                                text: data.success ? data.response : `❌ Error: ${data.error}`,
+                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                            };
+                            this.messages.push(botMessage);
+
+                            // Scroll to bottom again
+                            this.$nextTick(() => {
+                                const chatArea = document.getElementById('chatArea');
+                                chatArea.scrollTop = chatArea.scrollHeight;
+                            });
+                        }, 500);
+
+                    } catch (error) {
+                        // Hide typing indicator
+                        this.isTyping = false;
+
+                        // Add error message
+                        const errorMessage = {
+                            id: Date.now() + 1,
+                            sender: 'bot',
+                            text: `❌ Error sending message: ${error.message}`,
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        };
+                        this.messages.push(errorMessage);
+
+                        this.$nextTick(() => {
+                            const chatArea = document.getElementById('chatArea');
+                            chatArea.scrollTop = chatArea.scrollHeight;
+                        });
+                    }
+                },
+
+                async startVoiceRecording() {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        this.mediaRecorder = new MediaRecorder(stream);
+                        this.recordedChunks = [];
+
+                        this.mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                this.recordedChunks.push(event.data);
+                            }
+                        };
+
+                        this.mediaRecorder.onstop = async () => {
+                            const audioBlob = new Blob(this.recordedChunks, { type: 'audio/webm' });
+                            await this.processVoiceMessage(audioBlob);
+                            // Stop all tracks to release microphone
+                            stream.getTracks().forEach(track => track.stop());
+                        };
+
+                        this.mediaRecorder.start();
+                        this.isRecording = true;
+
+                        // Auto-stop after 5 seconds
+                        setTimeout(() => {
+                            if (this.isRecording) {
+                                this.stopVoiceRecording();
+                            }
+                        }, 5000);
+
+                    } catch (error) {
+                        console.error('Error starting voice recording:', error);
+                        alert('Could not access microphone. Please check permissions.');
+                    }
+                },
+
+                stopVoiceRecording() {
+                    if (this.mediaRecorder && this.isRecording) {
+                        this.mediaRecorder.stop();
+                        this.isRecording = false;
+                    }
+                },
+
+                async processVoiceMessage(audioBlob) {
+                    // Add user voice message indicator
+                    const userMessage = {
+                        id: Date.now(),
+                        sender: 'user',
+                        text: '🎤 Voice message sent',
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    this.messages.push(userMessage);
+
+                    // Scroll to bottom
+                    this.$nextTick(() => {
+                        const chatArea = document.getElementById('chatArea');
+                        chatArea.scrollTop = chatArea.scrollHeight;
+                    });
+
+                    try {
+                        // Convert blob to base64 for sending
+                        const reader = new FileReader();
+                        reader.onloadend = async () => {
+                            const base64Audio = reader.result.split(',')[1];
+
+                            // Send to server for speech recognition
+                            const response = await fetch('/api/process-voice', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    audio: base64Audio,
+                                    mimeType: 'audio/webm'
+                                })
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                // Process the recognized text as a regular message
+                                const textResponse = await fetch(`/test-message?message=${encodeURIComponent(data.transcript)}`);
+                                const textData = await textResponse.json();
+
+                                // Add bot response
+                                const botMessage = {
+                                    id: Date.now() + 1,
+                                    sender: 'bot',
+                                    text: textData.success ? textData.response : `❌ Error: ${textData.error}`,
+                                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                                };
+                                this.messages.push(botMessage);
+                            } else {
+                                // Add error message
+                                const errorMessage = {
+                                    id: Date.now() + 1,
+                                    sender: 'bot',
+                                    text: `❌ Voice recognition failed: ${data.error}`,
+                                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                                };
+                                this.messages.push(errorMessage);
+                            }
+
+                            // Scroll to bottom again
+                            this.$nextTick(() => {
+                                const chatArea = document.getElementById('chatArea');
+                                chatArea.scrollTop = chatArea.scrollHeight;
+                            });
+                        };
+
+                        reader.readAsDataURL(audioBlob);
+
+                    } catch (error) {
+                        // Add error message
+                        const errorMessage = {
+                            id: Date.now() + 1,
+                            sender: 'bot',
+                            text: `❌ Error processing voice message: ${error.message}`,
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        };
+                        this.messages.push(errorMessage);
+
+                        this.$nextTick(() => {
+                            const chatArea = document.getElementById('chatArea');
+                            chatArea.scrollTop = chatArea.scrollHeight;
+                        });
+                    }
+                },
+
+                async sendVoiceMessage() {
+                    if (this.isRecording) {
+                        this.stopVoiceRecording();
+                    } else {
+                        await this.startVoiceRecording();
+                    }
+                },
+
+                showAddEditModal(type, item) {
+                    this.modalType = type;
+                    this.isEditing = !!item;
+                    if (this.isEditing) {
+                        this.modalTitle = `Edit ${type.slice(0, -1)}`;
+                        this.modalData = { ...item };
+                    } else {
+                        this.modalTitle = `Add New ${type.slice(0, -1)}`;
+                        this.modalData = {};
+                    }
+                    this.isModalOpen = true;
+                },
+
+                async saveItem() {
+                    const method = this.isEditing ? 'PUT' : 'POST';
+                    const endpoint = this.isEditing ? `/api/${this.modalType}/${this.modalData.id}` : `/api/${this.modalType}`;
+
+                    try {
+                        const response = await fetch(endpoint, {
+                            method: method,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(this.modalData)
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            alert('Data saved successfully!');
+                            this.isModalOpen = false;
+                            this.loadData();
+                        } else {
+                            alert(`Error saving data: ${result.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error saving item:', error);
+                        alert('An unexpected error occurred while saving.');
+                    }
+                },
+
+                async deleteItem(type, id) {
+                    if (confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) {
+                        try {
+                            const response = await fetch(`/api/${type}/${id}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (result.success) {
+                                alert('Item deleted successfully!');
+                                this.loadData();
+                            } else {
+                                alert(`Error deleting item: ${result.error}`);
+                            }
+                        } catch (error) {
+                            console.error('Error deleting item:', error);
+                            alert('An unexpected error occurred while deleting.');
+                        }
+                    }
+                },
+                 async markCallbackComplete(id) {
+                     try {
+                         const response = await fetch(`/api/callbacks/${id}`, {
+                             method: 'PUT',
+                             headers: {
+                                 'Content-Type': 'application/json'
+                             },
+                             body: JSON.stringify({ status: 'completed' })
+                         });
+                         const result = await response.json();
+                         if (result.success) {
+                             this.loadData();
+                         } else {
+                             alert(`Error updating callback: ${result.error}`);
+                         }
+                     } catch (error) {
+                         console.error('Error updating callback:', error);
+                         alert('An unexpected error occurred while updating the callback.');
+                     }
+                 },
+ 
+                 async showVaccinationDetails(baby) {
+                     console.log('=== USING PLAIN JS FOR MODAL ===');
+
+                     // Use plain JavaScript to show modal
+                     const modal = document.querySelector('#vaccination-modal');
+                     if (modal) {
+                         modal.style.display = 'flex';
+                         modal.dataset.keepOpen = 'true'; // Flag to prevent auto-closing
+                         console.log('✅ Modal shown with plain JS');
+                     } else {
+                         console.error('❌ Modal element not found');
+                     }
+
+                     this.selectedBaby = baby;
+                     this.vaccinationStatus = null;
+
+                     // Update modal header
+                     document.getElementById('modal-baby-id').textContent = baby.beneficiary_id;
+                     document.getElementById('modal-status').textContent = 'LOADING';
+
+                     try {
+                         const response = await fetch(`/api/vaccination/${baby.beneficiary_id}`);
+                         const data = await response.json();
+
+                         if (data.success) {
+                             this.vaccinationStatus = data.data;
+                             console.log('✅ Data loaded');
+
+                             // Update modal with data
+                             document.getElementById('modal-status').textContent = 'LOADED';
+
+                             // Populate baby info
+                             const babyInfo = data.data.baby;
+                             document.getElementById('baby-name').textContent = babyInfo.baby_name || 'Baby ' + babyInfo.mother_name;
+                             document.getElementById('baby-mother').textContent = babyInfo.mother_name;
+                             document.getElementById('baby-dob').textContent = new Date(babyInfo.dob).toLocaleDateString();
+                             document.getElementById('baby-age').textContent = this.calculateAgeInYearsMonths(babyInfo.dob);
+
+                             // Show/hide sections based on data
+                             const overdueSection = document.getElementById('overdue-section');
+                             const upcomingSection = document.getElementById('upcoming-section');
+                             const completedSection = document.getElementById('completed-section');
+                             const allUpToDateSection = document.getElementById('all-up-to-date-section');
+
+                             if (data.data.overdue && data.data.overdue.length > 0) {
+                                 overdueSection.style.display = 'block';
+                                 // Populate overdue vaccines
+                                 const overdueList = document.getElementById('overdue-list');
+                                 overdueList.innerHTML = '';
+                                 data.data.overdue.forEach(vaccine => {
+                                     const div = document.createElement('div');
+                                     div.className = 'flex items-center justify-between bg-white p-3 rounded-lg border border-red-200';
+                                     div.innerHTML = `
+                                         <div>
+                                             <p class="font-medium text-red-900">${vaccine.name}</p>
+                                             <p class="text-sm text-red-700">${vaccine.description}</p>
+                                         </div>
+                                         <div class="text-right">
+                                             <p class="text-sm text-red-600 font-medium">OVERDUE</p>
+                                             <p class="text-xs text-red-500">${vaccine.daysPastDue} days past due</p>
+                                         </div>
+                                     `;
+                                     overdueList.appendChild(div);
+                                 });
+                             } else {
+                                 overdueSection.style.display = 'none';
+                             }
+
+                             if (data.data.upcoming && data.data.upcoming.length > 0) {
+                                 upcomingSection.style.display = 'block';
+                                 const nextVaccine = data.data.upcoming[0];
+                                 document.getElementById('upcoming-name').textContent = nextVaccine.name;
+                                 document.getElementById('upcoming-desc').textContent = nextVaccine.description;
+                                 document.getElementById('upcoming-days').textContent = nextVaccine.daysUntilDue;
+                                 document.getElementById('upcoming-date').textContent = new Date(nextVaccine.dueDate).toLocaleDateString();
+                             } else {
+                                 upcomingSection.style.display = 'none';
+                             }
+
+                             if (data.data.completed && data.data.completed.length > 0) {
+                                 completedSection.style.display = 'block';
+                                 const completedGrid = document.getElementById('completed-grid');
+                                 completedGrid.innerHTML = '';
+                                 data.data.completed.forEach(vaccine => {
+                                     const div = document.createElement('div');
+                                     div.className = 'bg-white p-3 rounded-lg border border-green-200 flex items-center';
+                                     div.innerHTML = `
+                                         <span class="text-green-600 mr-2">✓</span>
+                                         <div>
+                                             <p class="font-medium text-green-900 text-sm">${vaccine.name}</p>
+                                             <p class="text-xs text-green-600">${new Date(vaccine.vaccinationDate || vaccine.dob).toLocaleDateString()}</p>
+                                         </div>
+                                     `;
+                                     completedGrid.appendChild(div);
+                                 });
+                             } else {
+                                 completedSection.style.display = 'none';
+                             }
+
+                             // Show "all up to date" if no overdue or upcoming
+                             if ((!data.data.overdue || data.data.overdue.length === 0) &&
+                                 (!data.data.upcoming || data.data.upcoming.length === 0)) {
+                                 allUpToDateSection.style.display = 'block';
+                             } else {
+                                 allUpToDateSection.style.display = 'none';
+                             }
+
+                         } else {
+                             console.error('❌ API error:', data.error);
+                             document.getElementById('modal-status').textContent = 'ERROR - ' + data.error;
+                             // Don't auto-close, let user close manually
+                         }
+                     } catch (error) {
+                         console.error('❌ Fetch error:', error);
+                         document.getElementById('modal-status').textContent = 'ERROR - ' + error.message;
+                         // Don't auto-close, let user close manually
+                     }
+                 },
+ 
+                 calculateAgeInYearsMonths(dob) {
+                     const birthDate = new Date(dob);
+                     const today = new Date();
+
+                     let years = today.getFullYear() - birthDate.getFullYear();
+                     let months = today.getMonth() - birthDate.getMonth();
+
+                     // Adjust if birthday hasn't occurred this year
+                     if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+                         years--;
+                         months += 12;
+                     }
+
+                     // Adjust months if birthday hasn't occurred this month
+                     if (today.getDate() < birthDate.getDate()) {
+                         months--;
+                         if (months < 0) {
+                             months = 11;
+                             years--;
+                         }
+                     }
+
+                     if (years === 0) {
+                         return `${months} month${months !== 1 ? 's' : ''} old`;
+                     } else if (months === 0) {
+                         return `${years} year${years !== 1 ? 's' : ''} old`;
+                     } else {
+                         return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''} old`;
+                     }
+                 },
+
+                 filterBabies() {
+                     clearTimeout(this._filterTimeout);
+                     this._filterTimeout = setTimeout(() => {
+                         let filtered = [...this.babies];
+
+                         // Text search
+                         if (this.searchBabies.trim()) {
+                             const searchTerm = this.searchBabies.toLowerCase();
+                             filtered = filtered.filter(baby =>
+                                 (baby.baby_name || '').toLowerCase().includes(searchTerm) ||
+                                 baby.mother_name.toLowerCase().includes(searchTerm) ||
+                                 baby.beneficiary_id.toLowerCase().includes(searchTerm) ||
+                                 baby.phone_number.includes(searchTerm)
+                             );
+                         }
+
+                         // Vaccination status filter
+                         if (this.filterVaccinationStatus) {
+                             filtered = filtered.filter(baby => {
+                                 if (!baby.vaccinationStatus) return false;
+                                 switch (this.filterVaccinationStatus) {
+                                     case 'completed':
+                                         return (!baby.vaccinationStatus.overdue || baby.vaccinationStatus.overdue.length === 0) &&
+                                                (!baby.vaccinationStatus.upcoming || baby.vaccinationStatus.upcoming.length === 0);
+                                     case 'upcoming':
+                                         return baby.vaccinationStatus.upcoming && baby.vaccinationStatus.upcoming.length > 0 &&
+                                                (!baby.vaccinationStatus.overdue || baby.vaccinationStatus.overdue.length === 0);
+                                     case 'overdue':
+                                         return baby.vaccinationStatus.overdue && baby.vaccinationStatus.overdue.length > 0;
+                                     default:
+                                         return true;
+                                 }
+                             });
+                         }
+
+                         // Age range filter
+                         if (this.filterAgeRange) {
+                             filtered = filtered.filter(baby => {
+                                 const ageInMonths = this.calculateAgeInMonths(baby.dob);
+                                 switch (this.filterAgeRange) {
+                                     case '0-6':
+                                         return ageInMonths >= 0 && ageInMonths <= 6;
+                                     case '6-12':
+                                         return ageInMonths > 6 && ageInMonths <= 12;
+                                     case '12-24':
+                                         return ageInMonths > 12 && ageInMonths <= 24;
+                                     case '24+':
+                                         return ageInMonths > 24;
+                                     default:
+                                         return true;
+                                 }
+                             });
+                         }
+
+                         // Sorting
+                         filtered.sort((a, b) => {
+                             let aVal, bVal;
+                             switch (this.sortBabiesBy) {
+                                 case 'dob':
+                                     aVal = new Date(a.dob);
+                                     bVal = new Date(b.dob);
+                                     break;
+                                 case 'mother_name':
+                                     aVal = a.mother_name.toLowerCase();
+                                     bVal = b.mother_name.toLowerCase();
+                                     break;
+                                 case 'beneficiary_id':
+                                     aVal = a.beneficiary_id.toLowerCase();
+                                     bVal = b.beneficiary_id.toLowerCase();
+                                     break;
+                                 case 'created_at':
+                                 default:
+                                     aVal = new Date(a.created_at);
+                                     bVal = new Date(b.created_at);
+                                     break;
+                             }
+                             if (aVal < bVal) return -1;
+                             if (aVal > bVal) return 1;
+                             return 0;
+                         });
+
+                         this.filteredBabies = filtered;
+                     }, 300);
+                 },
+
+                 calculateAgeInMonths(dob) {
+                     const birthDate = new Date(dob);
+                     const today = new Date();
+                     return (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
+                 },
+
+                 clearFilters() {
+                     this.searchBabies = '';
+                     this.filterVaccinationStatus = '';
+                     this.filterAgeRange = '';
+                     this.sortBabiesBy = 'created_at';
+                     this.filterBabies();
+                 },
+
+                 toggleBabySelection(babyId) {
+                     if (this.selectedBabies.includes(babyId)) {
+                         this.selectedBabies = this.selectedBabies.filter(id => id !== babyId);
+                     } else {
+                         this.selectedBabies.push(babyId);
+                     }
+                 },
+
+                 toggleSelectAllBabies() {
+                     const allVisibleIds = this.filteredBabies.map(baby => baby.id);
+                     const allSelected = allVisibleIds.every(id => this.selectedBabies.includes(id));
+
+                     if (allSelected) {
+                         this.selectedBabies = this.selectedBabies.filter(id => !allVisibleIds.includes(id));
+                     } else {
+                         this.selectedBabies = [...new Set([...this.selectedBabies, ...allVisibleIds])];
+                     }
+                 },
+
+                 async bulkDeleteBabies() {
+                     if (this.selectedBabies.length === 0) return;
+
+                     if (confirm(`Are you sure you want to delete ${this.selectedBabies.length} selected babies? This action cannot be undone.`)) {
+                         let successCount = 0;
+                         let errorCount = 0;
+
+                         for (const babyId of this.selectedBabies) {
+                             try {
+                                 const response = await fetch(`/api/babies/${babyId}`, {
+                                     method: 'DELETE'
+                                 });
+                                 if (response.ok) {
+                                     successCount++;
+                                 } else {
+                                     errorCount++;
+                                 }
+                             } catch (error) {
+                                 console.error('Error deleting baby:', babyId, error);
+                                 errorCount++;
+                             }
+                         }
+
+                         alert(`Bulk delete completed: ${successCount} successful, ${errorCount} failed`);
+                         this.selectedBabies = [];
+                         this.loadData();
+                     }
+                 },
+
+                 toggleCallbackSelection(callbackId) {
+                     if (this.selectedCallbacks.includes(callbackId)) {
+                         this.selectedCallbacks = this.selectedCallbacks.filter(id => id !== callbackId);
+                     } else {
+                         this.selectedCallbacks.push(callbackId);
+                     }
+                 },
+
+                 toggleSelectAllCallbacks() {
+                     const pendingCallbacks = this.callbacks.filter(c => c.status === 'pending');
+                     const allPendingIds = pendingCallbacks.map(c => c.id);
+                     const allSelected = allPendingIds.every(id => this.selectedCallbacks.includes(id));
+
+                     if (allSelected) {
+                         this.selectedCallbacks = this.selectedCallbacks.filter(id => !allPendingIds.includes(id));
+                     } else {
+                         this.selectedCallbacks = [...new Set([...this.selectedCallbacks, ...allPendingIds])];
+                     }
+                 },
+
+                 async bulkCompleteCallbacks() {
+                     if (this.selectedCallbacks.length === 0) return;
+
+                     if (confirm(`Mark ${this.selectedCallbacks.length} selected callbacks as completed?`)) {
+                         let successCount = 0;
+                         let errorCount = 0;
+
+                         for (const callbackId of this.selectedCallbacks) {
+                             try {
+                                 const response = await fetch(`/api/callbacks/${callbackId}`, {
+                                     method: 'PUT',
+                                     headers: {
+                                         'Content-Type': 'application/json'
+                                     },
+                                     body: JSON.stringify({ status: 'completed' })
+                                 });
+                                 if (response.ok) {
+                                     successCount++;
+                                 } else {
+                                     errorCount++;
+                                 }
+                             } catch (error) {
+                                 console.error('Error completing callback:', callbackId, error);
+                                 errorCount++;
+                             }
+                         }
+
+                         alert(`Bulk completion completed: ${successCount} successful, ${errorCount} failed`);
+                         this.selectedCallbacks = [];
+                         this.loadData();
+                     }
+                 },
+ 
+                 async markVaccinationComplete() {
+                     if (!this.selectedBaby || !this.vaccinationStatus || !this.vaccinationStatus.upcoming || this.vaccinationStatus.upcoming.length === 0) {
+                         return;
+                     }
+
+                     const nextVaccine = this.vaccinationStatus.upcoming[0];
+                     const vaccinationDate = new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
+
+                     try {
+                         const response = await fetch(`/api/vaccination/${this.selectedBaby.beneficiary_id}/complete`, {
+                             method: 'POST',
+                             headers: {
+                                 'Content-Type': 'application/json'
+                             },
+                             body: JSON.stringify({
+                                 vaccine_name: nextVaccine.name,
+                                 vaccination_date: vaccinationDate
+                             })
+                         });
+
+                         const result = await response.json();
+                         if (result.success) {
+                             alert('Vaccination marked as complete!');
+                             // Refresh the vaccination details
+                             await this.showVaccinationDetails(this.selectedBaby);
+                         } else {
+                             alert(`Error marking vaccination complete: ${result.error}`);
+                         }
+                     } catch (error) {
+                         console.error('Error marking vaccination complete:', error);
+                         alert('An unexpected error occurred while marking vaccination complete.');
+                     }
+                 },
+
+                 async broadcastAlert(outbreakId) {
+                     if (confirm('Are you sure you want to broadcast alerts for this outbreak to all affected users?')) {
+                         try {
+                             const response = await fetch(`/api/outbreaks/${outbreakId}/broadcast`, {
+                                 method: 'POST'
+                             });
+                             const result = await response.json();
+                             if (result.success) {
+                                 alert(`Alert broadcast successful! ${result.alertsSent} users notified.`);
+                             } else {
+                                 alert(`Error broadcasting alert: ${result.error}`);
+                             }
+                         } catch (error) {
+                             console.error('Error broadcasting alert:', error);
+                             alert('An unexpected error occurred while broadcasting the alert.');
+                         }
+                     }
+                 },
+
+                 async broadcastAllAlerts() {
+                     const activeOutbreaks = this.outbreaks.filter(o => o.status === 'active' && (o.severity === 'high' || o.severity === 'critical'));
+                     if (activeOutbreaks.length === 0) {
+                         alert('No active high-severity outbreaks to broadcast.');
+                         return;
+                     }
+
+                     if (confirm(`Broadcast alerts for ${activeOutbreaks.length} active high-severity outbreaks?`)) {
+                         let totalSent = 0;
+                         for (const outbreak of activeOutbreaks) {
+                             try {
+                                 const response = await fetch(`/api/outbreaks/${outbreak.id}/broadcast`, {
+                                     method: 'POST'
+                                 });
+                                 const result = await response.json();
+                                 if (result.success) {
+                                     totalSent += result.alertsSent;
+                                 }
+                             } catch (error) {
+                                 console.error('Error broadcasting alert for outbreak', outbreak.id, error);
+                             }
+                         }
+                         alert(`Broadcast complete! ${totalSent} total alerts sent.`);
+                     }
+                 },
+
+                 exportToCSV(type) {
+                     let data = [];
+                     let filename = '';
+
+                     switch (type) {
+                         case 'babies':
+                             data = this.filteredBabies.map(baby => ({
+                                 'Beneficiary ID': baby.beneficiary_id,
+                                 'Baby Name': baby.baby_name || 'N/A',
+                                 'Mother Name': baby.mother_name,
+                                 'Date of Birth': baby.dob,
+                                 'Phone Number': baby.phone_number,
+                                 'Mother ID': baby.mother_id,
+                                 'Registration Date': baby.created_at
+                             }));
+                             filename = 'babies_data.csv';
+                             break;
+                         case 'workers':
+                             data = this.workers.map(worker => ({
+                                 'Name': worker.name,
+                                 'Designation': worker.designation,
+                                 'Phone Number': worker.phone_number,
+                                 'Pincode': worker.pincode,
+                                 'Facility Name': worker.facility_name,
+                                 'Facility Type': worker.facility_type,
+                                 'Address': worker.address,
+                                 'Registration Date': worker.created_at
+                             }));
+                             filename = 'health_workers_data.csv';
+                             break;
+                         case 'callbacks':
+                             data = this.callbacks.map(callback => ({
+                                 'Phone Number': callback.phone_number,
+                                 'Language': callback.language,
+                                 'Status': callback.status,
+                                 'Completed At': callback.completed_at || 'N/A',
+                                 'Counselor Name': callback.counselor_name || 'N/A',
+                                 'Feedback Rating': callback.feedback_rating || 'N/A',
+                                 'Feedback Text': callback.feedback_text || 'N/A',
+                                 'Requested At': callback.created_at
+                             }));
+                             filename = 'callback_requests_data.csv';
+                             break;
+                         case 'outbreaks':
+                             data = this.outbreaks.map(outbreak => ({
+                                 'Disease Name': outbreak.disease_name,
+                                 'Location': outbreak.location,
+                                 'State': outbreak.state,
+                                 'District': outbreak.district,
+                                 'Pincode': outbreak.pincode,
+                                 'Severity': outbreak.severity,
+                                 'Status': outbreak.status,
+                                 'Affected Population': outbreak.affected_population,
+                                 'Deaths': outbreak.deaths,
+                                 'Reported Date': outbreak.reported_date,
+                                 'Description': outbreak.description
+                             }));
+                             filename = 'outbreaks_data.csv';
+                             break;
+                         case 'messages':
+                             data = this.messages.map(message => ({
+                                 'Time': message.time,
+                                 'Sender': message.sender,
+                                 'Message': message.text,
+                                 'Type': message.sender === 'user' ? 'User Message' : 'Bot Response'
+                             }));
+                             filename = 'message_logs.csv';
+                             break;
+                     }
+
+                     if (data.length === 0) {
+                         alert('No data to export');
+                         return;
+                     }
+
+                     // Convert to CSV
+                     const headers = Object.keys(data[0]);
+                     const csvContent = [
+                         headers.join(','),
+                         ...data.map(row => headers.map(header => `"${row[header]}"`).join(','))
+                     ].join('\n');
+
+                     // Download
+                     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                     const link = document.createElement('a');
+                     const url = URL.createObjectURL(blob);
+                     link.setAttribute('href', url);
+                     link.setAttribute('download', filename);
+                     link.style.visibility = 'hidden';
+                     document.body.appendChild(link);
+                     link.click();
+                     document.body.removeChild(link);
+                 },
+
+                 createCharts() {
+                     this.createVaccinationChart();
+                     this.createCallbackChart();
+                     this.createOutbreakChart();
+                     this.createFeaturesChart();
+                 },
+
+                 createVaccinationChart() {
+                     const ctx = document.getElementById('vaccinationChart');
+                     if (!ctx) return;
+
+                     // Calculate vaccination stats
+                     let completed = 0;
+                     let overdue = 0;
+                     let upcoming = 0;
+
+                     this.babies.forEach(baby => {
+                         if (baby.vaccinationStatus) {
+                             if (baby.vaccinationStatus.overdue && baby.vaccinationStatus.overdue.length > 0) {
+                                 overdue++;
+                             } else if (baby.vaccinationStatus.upcoming && baby.vaccinationStatus.upcoming.length > 0) {
+                                 upcoming++;
+                             } else {
+                                 completed++;
+                             }
+                         }
+                     });
+
+                     this.charts.vaccinationChart = new Chart(ctx, {
+                         type: 'doughnut',
+                         data: {
+                             labels: ['Completed', 'Upcoming', 'Overdue'],
+                             datasets: [{
+                                 data: [completed, upcoming, overdue],
+                                 backgroundColor: [
+                                     '#10B981', // green
+                                     '#F59E0B', // yellow
+                                     '#EF4444'  // red
+                                 ],
+                                 borderWidth: 2,
+                                 borderColor: '#ffffff'
+                             }]
+                         },
+                         options: {
+                             responsive: true,
+                             plugins: {
+                                 legend: {
+                                     position: 'bottom',
+                                 },
+                                 tooltip: {
+                                     callbacks: {
+                                         label: function(context) {
+                                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                             const percentage = total > 0 ? Math.round((context.parsed / total) * 100) : 0;
+                                             return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                         }
+                                     }
+                                 }
+                             }
+                         }
+                     });
+                 },
+
+                 createCallbackChart() {
+                     const ctx = document.getElementById('callbackChart');
+                     if (!ctx) return;
+
+                     const pending = this.callbacks.filter(c => c.status === 'pending').length;
+                     const completed = this.callbacks.filter(c => c.status === 'completed').length;
+
+                     this.charts.callbackChart = new Chart(ctx, {
+                         type: 'pie',
+                         data: {
+                             labels: ['Pending', 'Completed'],
+                             datasets: [{
+                                 data: [pending, completed],
+                                 backgroundColor: [
+                                     '#F59E0B', // yellow
+                                     '#10B981'  // green
+                                 ],
+                                 borderWidth: 2,
+                                 borderColor: '#ffffff'
+                             }]
+                         },
+                         options: {
+                             responsive: true,
+                             plugins: {
+                                 legend: {
+                                     position: 'bottom',
+                                 }
+                             }
+                         }
+                     });
+                 },
+
+                 createOutbreakChart() {
+                     const ctx = document.getElementById('outbreakChart');
+                     if (!ctx) return;
+
+                     // Group outbreaks by date (last 30 days)
+                     const last30Days = {};
+                     const today = new Date();
+
+                     for (let i = 29; i >= 0; i--) {
+                         const date = new Date(today);
+                         date.setDate(date.getDate() - i);
+                         const dateStr = date.toISOString().split('T')[0];
+                         last30Days[dateStr] = 0;
+                     }
+
+                     this.outbreaks.forEach(outbreak => {
+                         const date = outbreak.reported_date;
+                         if (last30Days.hasOwnProperty(date)) {
+                             last30Days[date]++;
+                         }
+                     });
+
+                     const labels = Object.keys(last30Days);
+                     const data = Object.values(last30Days);
+
+                     this.charts.outbreakChart = new Chart(ctx, {
+                         type: 'line',
+                         data: {
+                             labels: labels.map(date => new Date(date).toLocaleDateString()),
+                             datasets: [{
+                                 label: 'New Outbreaks',
+                                 data: data,
+                                 borderColor: '#EF4444',
+                                 backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                 borderWidth: 2,
+                                 fill: true,
+                                 tension: 0.4
+                             }]
+                         },
+                         options: {
+                             responsive: true,
+                             scales: {
+                                 y: {
+                                     beginAtZero: true,
+                                     ticks: {
+                                         stepSize: 1
+                                     }
+                                 }
+                             },
+                             plugins: {
+                                 legend: {
+                                     display: false
+                                 }
+                             }
+                         }
+                     });
+                 },
+
+                 createFeaturesChart() {
+                     const ctx = document.getElementById('featuresChart');
+                     if (!ctx) return;
+
+                     // Mock data for popular features (in real app, this would come from analytics)
+                     const featuresData = {
+                         'Symptom Checker': 45,
+                         'Vaccination Info': 30,
+                         'Health Workers': 15,
+                         'Emergency Contacts': 8,
+                         'Outbreak Alerts': 2
+                     };
+
+                     this.charts.featuresChart = new Chart(ctx, {
+                         type: 'bar',
+                         data: {
+                             labels: Object.keys(featuresData),
+                             datasets: [{
+                                 label: 'Usage Count',
+                                 data: Object.values(featuresData),
+                                 backgroundColor: [
+                                     'rgba(59, 130, 246, 0.8)',
+                                     'rgba(16, 185, 129, 0.8)',
+                                     'rgba(245, 158, 11, 0.8)',
+                                     'rgba(239, 68, 68, 0.8)',
+                                     'rgba(139, 69, 19, 0.8)'
+                                 ],
+                                 borderWidth: 1
+                             }]
+                         },
+                         options: {
+                             responsive: true,
+                             scales: {
+                                 y: {
+                                     beginAtZero: true
+                                 }
+                             },
+                             plugins: {
+                                 legend: {
+                                     display: false
+                                 }
+                             }
+                         }
+                     });
+                 }
+            }
+        }
+    </script>
+</body>
+</html>

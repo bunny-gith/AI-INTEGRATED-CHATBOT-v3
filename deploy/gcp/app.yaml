@@ -1,0 +1,51 @@
+runtime: nodejs18
+env: standard
+
+# Instance configuration
+instance_class: F2
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10
+  target_cpu_utilization: 0.7
+  target_throughput_utilization: 0.8
+
+# Environment variables
+env_variables:
+  NODE_ENV: "production"
+  PORT: "8080"
+  DB_PATH: "/tmp/healthcare_bot.db"
+
+# Build configuration
+build_env_variables:
+  GOOGLE_NODE_RUN_SCRIPTS: ""
+
+# Handlers for static files
+handlers:
+- url: /admin
+  static_dir: public
+  secure: always
+
+- url: /.*
+  script: auto
+  secure: always
+
+# VPC access connector for database
+vpc_access_connector:
+  name: "projects/PROJECT_ID/locations/REGION/connectors/healthcare-connector"
+
+# Cloud SQL configuration (if using Cloud SQL)
+# beta_settings:
+#   cloud_sql_instances: "PROJECT_ID:REGION:INSTANCE_NAME"
+
+# Health checks
+health_check:
+  enable_health_check: true
+  check_interval_sec: 30
+  timeout_sec: 4
+  unhealthy_threshold: 2
+  healthy_threshold: 2
+  restart_threshold: 60
+
+# Network settings
+network:
+  name: default

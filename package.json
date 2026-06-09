@@ -1,0 +1,37 @@
+{
+  "name": "whatsapp-healthcare-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot for preventive healthcare in rural and semi-urban areas",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon --ignore healthcare_bot.db --ignore '*.db-journal' --ignore '*.db-wal' --ignore '*.db-shm' server.js",
+    "test": "node scripts/smoke-check.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "healthcare",
+    "bot",
+    "rural",
+    "vaccination",
+    "medicine"
+  ],
+  "author": "Healthcare Bot Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "form-data": "^4.0.4",
+    "node-cron": "^3.0.3",
+    "openai": "^5.23.1",
+    "sqlite3": "^5.1.6",
+    "twilio": "^4.23.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
